@@ -62,3 +62,67 @@ def splited(info,dic):
                 for d in ['-',info[3]]:
                     map_[dic[a]][dic[b]][dic[c]][dic[d]].append(info[4])
 #2/8 시도2 효율성 실패(시간초과)
+
+
+#1번째 방법
+from bisect import bisect_left as bl
+folder = {}
+
+def solution(info, query):
+    answer, query2 = [],[]
+    for i in info:
+        splited([j for j in i.split()])
+        
+    for i in folder.keys():
+        folder[i] = sorted(folder[i])
+        
+    for i in query:
+        check([j for j in i.split() if j != 'and'],answer)
+    return answer
+
+def splited(info):
+    for a in ['-',info[0]]:
+        for b in ['-',info[1]]:
+            for c in ['-',info[2]]:
+                for d in ['-',info[3]]:
+                    if a+b+c+d in folder.keys():
+                        folder[a+b+c+d].append(int(info[4]))
+                    else:
+                        folder[a+b+c+d] = [int(info[4])]
+                        
+def check(i,answer):
+    a = ''.join(i[:4])
+    if folder.get(a) != None:
+        answer.append(len(folder[a])-bl(folder[a],int(i[4])))
+        return
+    answer.append(0)
+
+#2번째 방법
+
+from bisect import bisect_left as bl
+folder = [[]for _ in range(4*3*3*3)]
+dic = {'-':0,'cpp':1,'java':2,'python':3,'backend':1,'frontend':2,'junior':1,'senior':2,'chicken':1,'pizza':2}
+
+def solution(info, query):
+    answer = []
+    for i in info:
+        splited([j for j in i.split()])
+    for i in range(4*3*3*3):
+        folder[i] = sorted(folder[i])
+    for i in query:
+        check([j for j in i.split() if j != 'and'],answer)
+    return answer
+
+def splited(info):
+    for i in range(1<<4):
+        temp = 0
+        for j in range(4):
+            if i&(1<<j):
+                temp += dic[info[j]]*3**(3-j)
+        folder[temp].append(int(info[4]))
+
+def check(i,answer):
+    temp,k = 0,0
+    for j in range(4):
+        temp += dic[i[j]]*3**(3-j)
+    answer.append(len(folder[temp])-bl(folder[temp],int(i[4])))
