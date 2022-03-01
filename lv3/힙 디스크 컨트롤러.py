@@ -1,3 +1,35 @@
+# 최종 완성
+#(누적시간 + 해당 소요시간)-시작시간
+import heapq as hq
+answer = []
+def solution(jobs):
+    jobs.sort(key= lambda x:-x[0])
+    readyq = []
+    time,jobsLen = jobs[-1][0], len(jobs)
+    while True:
+        if jobs:
+            srq,time = setReadyq(time,jobs,readyq)
+            for i in srq:
+                hq.heappush(readyq,i)
+        if not readyq:
+            return sum(answer) // jobsLen
+        howLong, start = hq.heappop(readyq)
+        answer.append(time+howLong - start)
+        time += howLong
+
+def setReadyq(time,jobs,check):
+    readyq = []
+    for i in reversed(jobs):
+        if i[0] <= time:
+            start,howLong = jobs.pop()
+            readyq.append([howLong,start])
+        else:
+            if len(jobs) > 0 and not readyq and not check:
+                return setReadyq(jobs[-1][0],jobs,check)
+            break
+    return readyq,time
+
+
 #(누적시간 + 해당 소요시간)-시작시간
 import heapq as hq
 answer = []
