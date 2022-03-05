@@ -56,3 +56,29 @@ def bfs(edge,root):
             add = set(edge[current[0]]) - set(visited)
             queue += ([[i,current[1]+1] for i in add])
     return visited
+
+# 3/5
+import sys; sys.setrecursionlimit(999999)
+def solution(n, edge):
+    
+    global ways,fee
+    ways = {i:[] for i in range(1,n+1)}
+    fee = [10e10 if i > 1 else 0 for i in range(n+1)]
+
+    for i,j in edge:
+        ways[i].append(j)
+        ways[j].append(i)
+
+    for i in ways[1]:
+        dfs(i,0)
+        
+    return fee.count(max(fee))
+
+def dfs(vertex,cost):
+    global ways,fee
+    if fee[vertex] <= cost:
+        return
+    fee[vertex] = cost
+    for i in ways[vertex]:
+        if fee[i] > cost+1:
+            dfs(i,cost+1)
