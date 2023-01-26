@@ -12,7 +12,6 @@ func solution(_ weights:[Int]) -> Int64 {
 
     for w in Set(weights) {
         for (d1, d2) in distance {
-            if (w * d1) % d2 != 0 { continue }
             let temp = (w * d1) / d2
             if let value = weightsGrouping[temp] {
                 answer += Int64(value.count) * Int64(weightsGrouping[w]!.count)
