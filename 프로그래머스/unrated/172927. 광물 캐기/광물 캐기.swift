@@ -1,39 +1,54 @@
 import Foundation
 
+var ans = 25*51
+
+func recursion(_ picks: [Int], _ minerals: [String], _ index: Int, _ value: Int) {
+    if picks.reduce(0, +) == 0 || index >= minerals.count {
+        ans = min(ans, value)
+        return
+    }
+
+    for i in 0..<picks.count {
+        if picks[i] < 1 { continue }
+
+        var mineralCount = 0, _value = value
+        for _ in 0..<5 {
+            _value += getValue(i, minerals[index + mineralCount])
+            mineralCount += 1
+
+            if index + mineralCount >= minerals.count { break }
+        }
+
+        var _picks = picks
+        _picks[i] -= 1
+        recursion(_picks, minerals, index + mineralCount, _value)
+    }
+}
+
+func getValue(_ index: Int, _ mineral: String) -> Int {
+    switch index {
+        case 0:
+            return 1
+        case 1:
+            if mineral == "diamond" {
+                return 5
+            } else {
+                return 1
+            }
+        case 2:
+            if mineral == "diamond" {
+                return 25
+            } else if mineral == "iron" {
+                return 5
+            } else {
+                return 1
+            }
+        default:
+            return 0
+    }
+}
+
 func solution(_ picks:[Int], _ minerals:[String]) -> Int {
-    let limitIndex: Int = picks.map { $0 * 5 }.reduce(0, +) - 1
-    var quantity: [Int] = [0, 0, 0]
-    var newMinerals: [[Int]] = []
-    
-    for (index, value) in minerals.enumerated() {
-        if index > limitIndex { break }
-        switch value {
-            case "diamond": quantity[0] += 1
-            case "iron": quantity[1] += 1
-            default: quantity[2] += 1
-        }
-        
-        if (index + 1) % 5 == 0 || index == minerals.endIndex - 1 {
-            let cost = quantity[0] * 25 + quantity[1] * 5 + quantity[2]
-            newMinerals.append([cost, quantity[0], quantity[1], quantity[2]])
-            quantity = [0, 0, 0]
-        }
-    }
-    
-    quantity = picks
-    
-    return newMinerals
-    .sorted { $0[0] > $1[0] }
-    .reduce(0) { pre, post in
-        if quantity[0] > 0 {
-            quantity[0] -= 1
-            return pre + post[1...].reduce(0, +)
-        } else if quantity[1] > 0 {
-            quantity[1] -= 1
-            return pre + post[1] * 5 + post[2...].reduce(0, +)
-        } else {
-            quantity[2] -= 1
-            return pre + post[1] * 25 + post[2] * 5 + post[3]
-        }
-    }
+    recursion(picks, minerals, 0, 0)
+    return ans
 }
