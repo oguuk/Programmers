@@ -1,50 +1,32 @@
 let nh = readLine()!.split(separator: " ").map { Int(String($0))! }
-var stal = [Int]()
-var opStal = [Int]()
+var upRock: [Int] = Array(repeating: 0, count: nh[1] + 2)
+var downRock: [Int] = Array(repeating: 0, count: nh[1] + 2)
 
 for i in 0..<nh[0] {
-  if i % 2 == 0 {
-    stal.append(Int(readLine()!)!)
-  } else {
-    opStal.append(Int(readLine()!)!)
-  }
-}
-
-stal.sort()
-opStal.sort()
-
-func binary(_ array: [Int], target: Int, isUpper: Bool) -> Int {
-  var low = 0
-  var high = array.count
-  
-  while low < high {
-    let mid = (low + high)/2
-    if target == array[mid] {
-      isUpper ? (low = mid+1) : (high = mid)
-    } else if target < array[mid] {
-      high = mid
+    let rock = Int(readLine()!)!
+    if i % 2 == 0 {
+        downRock[rock] += 1
     } else {
-      low = mid+1
+        upRock[rock] += 1
     }
-  }
-  return low
 }
 
-var minTable = [Int: Int]()
-var minKey = 555555
+var upSum = upRock
+var downSum = downRock
 
-for height in 1...nh[1] {
-  var count = stal.count - binary(stal, target: height, isUpper: false)
-  count += opStal.count - binary(opStal, target: nh[1] - height, isUpper: true)
-  
-  if minTable.keys.contains(count) {
-    minTable[count]! += 1
-  } else {
-    minTable[count] = 1
-    if count < minKey {
-      minKey = count
-    }
-  }
+for i in stride(from: nh[1], through: 1, by: -1) {
+    upSum[i] = upSum[i + 1] + upRock[i]
+    downSum[i] = downSum[i + 1] + downRock[i]
 }
 
-print(minKey, minTable[minKey]!)
+var smallQuantityRock = Int.max
+var dict: [Int : Int] = [:]
+
+for i in 1...nh[1] {
+    let sum = upSum[nh[1] - i + 1] + downSum[i]
+    if dict[sum] == nil { dict[sum] = 0 }
+    if sum < smallQuantityRock { smallQuantityRock = sum }
+    dict[sum]! += 1
+}
+
+print(smallQuantityRock, dict[smallQuantityRock]!)
