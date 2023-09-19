@@ -1,3 +1,3 @@
-SELECT *
-FROM FOOD_PRODUCT
-WHERE PRICE = (SELECT MAX(PRICE) FROM FOOD_PRODUCT)
+select *
+from food_product
+where price in (select max(price )from food_product )
