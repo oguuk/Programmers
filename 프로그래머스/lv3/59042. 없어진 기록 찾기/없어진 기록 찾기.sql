@@ -1,4 +1,5 @@
-select b.animal_id, b.name
-from ANIMAL_INS a right join ANIMAL_OUTS b on a.animal_id = b.animal_id
-where a.intake_condition is null
-order by b. animal_id
+select o.animal_id, o.name
+from animal_ins i
+right join animal_outs o on i.animal_id = o.animal_id
+where i.intake_condition is null
+order by i.animal_id desc
