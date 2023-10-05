@@ -1,5 +1,5 @@
-select o.animal_id, o.name
-from animal_ins i
-right join animal_outs o on i.animal_id = o.animal_id
-where i.intake_condition is null
-order by i.animal_id desc
+select o.ANIMAL_ID, o.name
+from ANIMAL_OUTS o
+left join ANIMAL_INS i on i.ANIMAL_ID = o.ANIMAL_ID
+where isnull(i.animal_type)
+order by o.ANIMAL_ID
