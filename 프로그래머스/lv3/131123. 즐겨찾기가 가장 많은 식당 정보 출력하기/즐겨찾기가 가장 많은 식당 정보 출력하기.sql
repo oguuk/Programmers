@@ -1,4 +1,8 @@
-select food_type, rest_id, rest_name, favorites
-from rest_info
-where (food_type, favorites) in (select food_type, max(favorites) from rest_info group by food_type)
-order by food_type desc
+SELECT r1.food_type, r1.rest_id, r1.rest_name, r1.favorites
+FROM rest_info r1
+JOIN (
+    SELECT food_type, MAX(favorites) AS max_fav
+    FROM rest_info
+    GROUP BY food_type
+) r2 ON r1.food_type = r2.food_type AND r1.favorites = r2.max_fav
+ORDER BY r1.food_type DESC;
