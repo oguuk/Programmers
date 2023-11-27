@@ -1,8 +1,8 @@
-// 비용이 가장 적고, 왔던 길 되돌아가는게 아니라 첫지점으로만 다시 감
+// 비용이 가장 적은 루트
 let n: Int = Int(readLine()!)!
 var routes: [[Int]] = Array(repeating: Array(repeating: 0, count: n), count: n)
-var cityVisit: [Bool] = []
-var visitedCities: [Int] = []
+var cityVisit: [Bool] = Array(repeating: false, count: n)
+var visitedCities: [Int] = [0]
 var answer: Int = Int.max
 
 for i in 0..<n {
@@ -36,10 +36,6 @@ func solution(_ curr: Int, _ totalCost: Int) {
     }
 }
 
-for i in 0..<n {
-    cityVisit = Array(repeating: false, count: n)
-    visitedCities = [i]
-    solution(i, 0)
-}
+solution(0, 0)
 
 print(answer)
