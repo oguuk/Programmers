@@ -1,0 +1,1 @@
+var solution=(n)=> new Set(n).size > n.length / 2 ? n.length / 2 : new Set(n).size;
