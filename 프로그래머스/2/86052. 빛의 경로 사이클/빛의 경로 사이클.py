@@ -1,10 +1,10 @@
-def solution(grid):
+def solution(grd):
     global route
     route, answer = {}, []
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
+    for i in range(len(grd)):
+        for j in range(len(grd[0])):
             for k in range(1,5):
-                a = mirror([k,i,j],grid)
+                a = mirror([k,i,j],grd)
                 if a:
                     answer.append(a)
     return sorted(answer)
